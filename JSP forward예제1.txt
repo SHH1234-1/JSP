@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+	<h1>Forward Tag Example1</h1>
+	<form method=post action="forwardTag1_1.jsp"> <post방식으로 forwardTag1_1.jsp에 넘겨준다>
+		아이디 : <input name="id"><p/>  <!--1.input type text는 기본설정이 되어있으므로 생략가능 2. input name="id"-->
+		패스워드: <input type="password" name="pwd"><p/>  <!--1.input type text는 기본설정이 되어있으므로 생략가능 2. input name="id"-->
+		<input type="submit" value="보내기"> <input type="submit" submit 버튼생성 value="보내기" submit버튼안에 보내기라는 글자 생성 >
+	</form>
+</body>
+</html>
+-------------------------------------------------------------------
+<!--파일이름 forwardTag1_1.jsp -->
+<%@page contentType="text/html;charset=UTF-8"%>
+<%
+	   request.setCharacterEncoding("UTF-8"); <!--앞에 UTF-8로 설정한 것을 받기-->
+		String id = request.getParameter("id"); <!--앞의 input type name 값을 받기-->
+		String pwd = request.getParameter("pwd"); <!--앞의 input type password의 값을 받기-->
+		String name= "손효현";
+%>
+<html>
+<body>
+<h1>Forward Tag Example1</h1>
+Forward Tag의 포워딩 되기 전의 페이지입니다.
+<%
+	if(id.equals("son")){      <!--만일 id에 son 이라는 값을 입력받았다면-->
+		if(pwd.equals("1234")){  <!--만일 pwd에 1234 이라는 값을 입력받았다면-->
+%>
+			<jsp:forward page="forwardTag1_2.jsp"> <!--id값과 pwd의 값을 forwardTag1_2.jsp에 넘겨준다-->
+				<jsp:param name="name" value="손효현"/> <!--만일 name 이라는 변수가 있다면 그것을 손효현으로 바꾼다-->
+			</jsp:forward>
+<%
+		}
+	}
+%>
+	<script>
+		history.back();  <!--만일 id의 값이 son이 아니고 pwd의 값이1234가 아니라면 이전페이지로 돌린다-->
+	</script>
+
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------
+<%@page contentType="text/html;charset=UTF-8"%>
+<%
+	String id = request.getParameter("id");  <!--id값을 요청-->
+	String pwd = request.getParameter("pwd"); <!--pwd값을 요청-->
+%>
+<h1>Forward Tag Example1</h1>
+당신의 아이디는<b><%=id%></b>이고<p/>
+패스워드는 <b><%=pwd%></b> 입니다.
+
+<!--출력형태 : 당신의 아이디는 손효현이고 
+     패스워드는 1234입니다	-->
