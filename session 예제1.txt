@@ -1,0 +1,98 @@
+<!--파일 이름 session1_1.html-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>session example1</h1>
+	<form method = "post" action="session1.jsp"><!--전달 방식 post 방식 form안에 있는 것들을 session1.jsp으로 넘겨줌-->
+		아이디 : <input name="id"><br>
+		비밀번호 : <input type="password" name="pwd"><br>
+		<input type="submit" value="로그인">
+	</form>
+</body>
+</html>
+-------------------------------------------------------------------------------
+<!--파일 이름 session1.jsp-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" session="true" %>
+<!DOCTYPE html>
+<%
+	request.setCharacterEncoding("UTF-8"); //<!--글자 타입을 UTF-8로 지정-->
+
+	String id = request.getParameter("id"); //<!--input name "id" 값을 요청-->
+	String pwd = request.getParameter("pwd"); //<!--input name "pwd" 값을 요청-->
+	
+	session.setAttribute("idKey", id); //<!-- id의 key값을 idkey로 설정하고 그것을 session이라고 하는 객체에 연결-->
+	
+	session.setMaxInactiveInterval(20); //<!--세션의 최대 연결시간을 20초로 설정-->
+	
+%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>session example1</h1>
+	<form method="post" action="session1_1.jsp">//<!--post 방식으로 session1_1.jsp로 넘겨줌-->
+		1. 가장 좋아하는 계절은<br>
+		<input type="radio" name="season" value="봄">봄<br> <input type="radio"형식 + name = season value="봄">
+		<input type="radio" name="season" value="여름">여름<br>
+		<input type="radio" name="season" value="가을">가을<br>
+		<input type="radio" name="season" value="겨울">겨울<br>
+		
+		<input type="submit" value="결과보기">
+	</form>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%
+	request.setCharacterEncoding("UTF-8");  <!--글자 UTF-8로 지정-->
+	String season = request.getParameter("season"); //<!--input type="radio"를 전부 다 받아옴-->
+	String id = (String)session.getAttribute("idKey"); //<!-- key값 즉 idkey는 object클래스 이므로 (String)형태로 다운캐스팅을 한다-->
+	
+	String sessionId = session.getId(); <session에 들어있는 id값을 호출>
+	
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); //<!-- SimpleDateFormat시간을 호출하는 클래스-->
+	
+	int intervalTime = session.getMaxInactiveInterval(); //<!--세션의 제한시간 아까 20초로 설정한거 호출-->
+	long lastTime = session.getLastAccessedTime(); //마지막 클라이언트의 요청시간.
+	long creatTime = session.getCreationTime(); //세션이 생성된 시간.
+	session.setAttribute("formatter", formatter);
+%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	if(id != null){ //<!--session객체의 id 값이 null이 아니라면 if문 이하를 아니면 else를출력 --> id값을 세션안에다 넣었기 때문에 세션이 만료되어지면 id값은 null이되어진다
+%>
+	<%=id %>님이 좋아하는 계절은 <%=season %>입니다.
+	세션 ID : <%=sessionId %>
+	세션 유지 시간 : <%=intervalTime %>초
+	세션이 생성된 시간 : <%=formatter.format(creatTime) %>
+	클라이언트의 마지막 요청시간 : <%=formatter.format(lastTime) %>
+	<form method = "post" action="session1_2.jsp">
+		<input name = "name"><br>
+		<input type = "submit" value = "다음">
+	</form>
+<%
+	}else{
+%>
+	세션 시간이 만료되었습니다. 다시 로그인 하십시오.
+<%
+	}	
+
+%>
+</body>
+</html>
