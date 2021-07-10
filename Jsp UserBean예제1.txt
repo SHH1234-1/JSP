@@ -1,0 +1,195 @@
+<!--파일이름 member.jsp-->
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table width="80%" align="center" border="0" cellspacing="0" cellpadding="5"><!--table width="80%" 넓이 80% align="center" 가운데 정렬 border="0"표 굵기 0 cellspacing="0" 셀과 셀의 간격 0 cellpadding="5" 셀과 글자의 간격5-->
+	<tr>
+		<td align="center" valign="middle" bgcolor="#FFFFCC"> <!--align="center" 글자 가운데 정렬 / valign="middle" 글자위치 중간 / bgcolor="#FFFFCC"배경색-->
+			<table width="90%" border="1" cellspacing="0" cellpadding="2" align="center"> <!--table width="90%" 테이블 크기 앞에 만든 테이블기준으로 90%/ border="1" 표굵기 1 cellspacing="2" 셀과 셀의 간격 2 cellpadding="2" 셀과 글자의 간격2-->
+				<form name = "regForm" method="post" action="registerProc.jsp"> <!--form의 이름 regForm method="post" 넘겨주는 방식을 post방식으로 action="registerProc.jsp"의 페이지에 넘겨줌-->
+					<tr>
+						<td colspan="3"><font color="#FFFFFF"><b>회원 가입</b></font></td> <!--td colspan 열3개를 합치기-->
+					</tr>
+					<tr>
+						<td width="100">아이디</td>
+						<td width="200"><input name="id" size="15"></td>
+						<td width="200">아이디를 입력해 주세요.</td>
+					</tr>
+					<tr>
+						<td>패스워드</td>
+						<td><input type="password" name="pwd" size="15"></td>
+						<td>패스워드를 입력해 주세요.</td>
+					</tr>
+					<tr>
+						<td>패스워드 확인</td>
+						<td><input type="password" name="repwd" size="15"></td>
+						<td>패스워드를 확인합니다.</td>
+					</tr>
+					<tr>
+						<td>이름</td>
+						<td><input name="name" size="15"></td>
+						<td>이름을 입력해주세요.</td>
+					</tr>
+					<tr>
+						<td>생년월일</td>
+						<td><input name="birthday" size="27"></td>
+						<td>생년월일을 입력해주세요.</td>
+					</tr>
+					<tr>
+						<td>이메일</td>
+						<td><input type="email" name="email" size="20"></td>
+						<td>이메일을 입력해주세요.</td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center">
+							<input type="button" value="회원가입 " onclick="inputCheck()"> <!--앞에서 회원정보를 모두 입력하고 button을 눌렀을때(onclick했을때) inputCheck()함수 실행-->
+							<input type="reset" value="다시쓰기">
+						</td>
+					</tr>
+				</form>
+			</table>	
+		</td>
+	</tr>
+	</table>
+	<script>
+		function inputCheck(){
+			if(document.regForm.id.value==""){  <!--만일 onclick을 했을때  input name="id"이 비어있다면-->
+				alert("아이디를 입력해 주세요"); <!--alert 메소드 호출-->
+				document.regForm.id.focus();  <!--아이디를 입력하는 란에 커서가 가기-->
+				return;
+			}
+			if(document.regForm.pwd.value==""){ <!--만일 onclick을 했을때  input type="password""이 비어있다면-->
+				alert("비밀번호를 입력해 주세요"); <!--alert 메소드 호출-->
+				document.regForm.pwd.focus();  <!--아이디를 입력하는 란에 커서가 가기-->
+			}
+			if(document.regForm.repwd.value==""){ <!--만일 onclick을 했을때  input type="password" name="repwd" 이 비어있다면-->
+				alert("비밀번호확인을 입력해 주세요"); <!--alert 메소드 호출-->
+				document.regForm.repwd.focus();  <!--아이디를 입력하는 란에 커서가 가기-->
+				return;
+			}
+			if(document.regForm.repwd.value!=document.regForm.pwd.value){  <!--만일 name="repwd"와  name="pwd" 값이 같지 않다면-->
+				alert("비밀번호가 서로 일치하지 않습니다."); <!--alert 메소드 호출-->
+				document.regForm.repwd.focus();  <!--패스워드를 확인합니다 란에 커서가 가기-->
+				return;
+			}
+			if(document.regForm.name.value==""){  <!--만일 onclick을 했을때 input name="name"이 비어있다면-->
+				alert("이름을 입력해 주세요");  <!--alert 메소드 호출-->
+				document.regForm.name.focus();   <!--이름을 입력해주세요 란에 커서가 가기-->
+				return;
+			}
+			if(document.regForm.birthday.value==""){  <!--만일 onclick을 했을때 input name="birthday" 이 비어있다면-->
+				alert("생일을 입력해 주세요");    <!--alert 메소드 호출-->
+				document.regForm.birthday.focus();  <!--생년월일을 입력해주세요.에 커서가 가기-->
+				return;
+			}
+			if(document.regForm.email.value==""){  <!--만일 onclick을 했을때 input type="email" name=" 이 비어있다면-->
+				alert("email을 입력해 주세요"); <!--alert 메소드 호출-->
+				document.regForm.email.focus();  <!--이메일을 입력해주세요..에 커서가 가기-->
+				return;
+			}
+			document.regForm.submit(); <!--후에 registerProc.jsp로 넘겨줌-->
+		}
+	</script>
+</body>
+</html>
+
+------------------------------------------------------------------------------------------------------------------------------
+//파일이름 MemberBean.java
+package chapter6;
+
+public class MemberBean {
+	private String id;
+	private String pwd;
+	private String repwd;
+	private String name;
+	private String birthday;
+	private String email;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	public String getRepwd() {
+		return repwd;
+	}
+	public void setRepwd(String repwd) {
+		this.repwd = repwd;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	
+
+	
+
+}
+------------------------------------------------------------------------------------------------------------------------------
+<!--파일이름 registerProc.jsp-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");<!--글자 UTF-8로 지정-->
+%>
+<jsp:useBean id="regBean" class="chapter6.MemberBean" scope="page"/><!-- id(객체명) regBean  class="chapter6.MemberBean" 클래스 chapter6.MemberBean  scope="page"현재 페이지에서만 가능-->
+<jsp:setProperty name="regBean" property="*" /> <!--regBean이라는 변수는  class="chapter6.MemberBean"의 모든 변수를 가진다라는 의미의 property="*"-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입 확인</title>
+</head>
+<body>
+	<table width="80%" align="center" border="0" cellspacing="0" cellpadding="5"><!--table width="80%" 넓이 80% align="center" 가운데 정렬 border="0"표 굵기 0 cellspacing="0" 셀과 셀의 간격 0 cellpadding="5" 셀과 글자의 간격5-->
+		<tr>
+			<td align="center" valign="middle" bgcolor="#FFFFCC"> <!--align="center" 글자 가운데 정렬 / valign="middle" 글자위치 중간 / bgcolor="#FFFFCC"배경색-->
+			<table width="90%" border="1" cellspacing="0" cellpadding="2" align="center"> <!--table width="90%" 테이블 크기 앞에 만든 테이블기준으로 90%/ border="1" 표굵기 1 cellspacing="2" 셀과 셀의 간격 2 cellpadding="2" 셀과 글자의 간격2-->
+				<form name="regForm" method="post" action="memberInsert.jsp"> <!--form의 이름 regForm method="post" 넘겨주는 방식을 post방식으로 action="memberInsert.jsp" "memberInsert.jsp"에 넘겨줌 하지만 여기서는 구현하지 않음-->
+					<tr align="center" bgcolor="#996600"><!--글자 위치 중앙 배경 bgcolor="#996600"-->
+					<td colspan="3">
+						<font color="#FFFFFF">
+							<b>
+							<%=regBean.getName() %><!--regBean변수가 class="chapter6.MemberBean"의 getName()에 접근하여 아까 입력한 id값을 가져온다-->
+							<jsp:getProperty name="regBean" property="name" /><!--위와동일-->
+							회원님이 작성하신 내용입니다. 확인해 주세요.
+							</b>
+						</font>
+					</td>
+				</form>
+			</table>
+		</tr>
+	</table>
+</body>
+</html>
+
