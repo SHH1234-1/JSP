@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %> <!--<%@ page import = "java.sql.DriverManager" %> <%@ page import = "java.sql.Connection" %> <%@ page import = "java.sql.Statement" %> <%@ page import = "java.sql.ResultSet" %> <%@ page import = "java.sql.SQLException" %>-->
+<%
+	Class.forName("org.gjt.mm.mysql.Driver"); <!--자바와 MySQL을 연동하기 위해서 JDBC를 로딩해줌 -->
+	Connection con = null;  <!--Connection  : java와 MYSQL를 연결-->
+	Statement stmt = null;   <!--Statement : java와 MYSQL를 연결한 상태에서 값을 자바로 넘겨줌-->
+	ResultSet rs = null;      <!--ResultSet : 넘겨준 값을 출력-->
+	
+	String 	id = "",			<!--mysql에 생성된 값-->
+			pwd = "",
+			name = "",
+			email = "",
+			phone = "",
+			zipcode = "",
+			address = "",
+			job = "",
+			createdate = "",
+			updatedate = "";
+	
+	int num1 = 0, num2 = 0;
+	
+	int counter = 0;
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	try{
+		con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/web", "root", "toor");<!--DriverManager.getConnection : 자바와 데이터베이스를 연결 web : String jdbcURL "root", "toor" MYSQL의 아이디 비밀번호-->
+		stmt = con.createStatement();   <!--MYSQL에 연결한 후 MYSQL에 저장되어 있는 값을 가져옴-->
+		rs = stmt.executeQuery("select * from tblRegister");<!-- tblRegister안에 저장되어있는 값 *(전체를) select(선택하여) 출력-->
+		if(rs != null){
+			while(rs.next()){  <!--값이 있으면 무한루프 없으면 while문 종료-->
+				id = rs.getString("id"); <!--MYSQL의 id 항목의 값을 id 변수에 저장-->
+				pwd = rs.getString("pwd"); <!--MYSQL의 pwd 값을 pwd 변수에 저장-->
+				name = rs.getString("name"); <!--MYSQL의 name 값을 pwd 변수에 저장-->
+				num1 = rs.getInt("num1");    <!--MYSQL의  num1 값을 num1 변수에 저장-->
+				num2 = rs.getInt("num2");    <!--MYSQL의 num2 값을 num2 변수에 저장-->
+				email = rs.getString("email");   <!--MYSQL의 email 값을 email 변수에 저장-->
+				phone = rs.getString("phone");   <!--MYSQL의phone 값을 phone 변수에 저장-->
+				zipcode = rs.getString("zipcode");  <!--MYSQL의 zipcod 값을 zipcode 변수에 저장-->
+				address = rs.getString("address");  <!--MYSQL의 address 값을 address 변수에 저장-->
+				job = rs.getString("job");    <!--MYSQL의 job 값을 address 값을job변수에 저장-->
+				createdate = rs.getString("createdate");   <!--MYSQL의createdate 값을 createdate 변수에 저장-->
+				updatedate = rs.getString("updatedate");   <!--MYSQL의 updatedate 값을updatedate 변수에 저장-->
+%>
+				id: <%=id %><br>   <!--MySQL의 값 출력-->
+				pwd: <%=pwd %><br>
+				name: <%=name %><br>
+				num1: <%=num1 %><br>
+				num2: <%=num2 %><br>
+				email: <%=email %><br>
+				phone: <%=phone %><br>
+				zipcode: <%=zipcode %><br>
+				address: <%=address %><br>
+				createdate: <%=createdate %><br>
+				updatedate: <%=updatedate %><br>
+				<hr>
+<%
+				counter++;<!--각 테이블 하나가 출력된 개수를 카운트-->
+			} //while end
+		} //if end
+	}catch(SQLException sqlEx){
+		out.println(sqlEx);
+	}catch(Exception ex) {
+		out.println(ex);
+	}finally{
+		if(rs != null){
+			try{
+				rs.close();
+			}catch(SQLException sqlEx){
+				out.println(sqlEx);
+			}
+		}
+		if(stmt != null){
+			try{
+				stmt.close();
+			}catch(SQLException sqlEx){
+				out.println(sqlEx);
+			}
+		}
+		if(con != null){
+			try{
+				con.close();
+			}catch(Exception ex){
+				out.println(ex);
+			}
+		}
+	}
+%>
+<!--서버를 종료시키는 순서는  ResultSet Statement Connection 순으로 종료되므로 rs stmt con 순으로 종료시킨다-->
+</body>
+</html>
