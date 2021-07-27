@@ -1,0 +1,38 @@
+package jspEx;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class Index
+ */
+@WebServlet("/jspEx/index")
+public class Index extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 */
+	
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");  
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();  //session선언
+		UserBean sessionBean = (UserBean)session.getAttribute("userBean"); //getAttribute("userBean")를 sessionBean에 저장
+		if(sessionBean == null) {  //첫페이지에서는 아직 아무런 값이 입력되지 않았으므로 서블릿을 실행한 그 첫 페이지에서
+			request.getRequestDispatcher("header_login.jsp").include(request, response); //header_login.jsp를 보여주기
+		}else {
+			request.setAttribute("name", sessionBean.getUser_name()); //아니라면 UserBean에 있는getUser_name를 받아오기(즉 로그인이 되었다면)
+			request.getRequestDispatcher("header_logout.jsp").include(request, response); //header_logout.jsp를 보여주기
+		}
+		request.getRequestDispatcher("index.jsp").include(request, response); //index.jsp를 보여주기
+		request.getRequestDispatcher("footer.jsp").include(request, response);//footer.jsp를 보여주기
+	}
+
+}
