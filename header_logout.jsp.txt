@@ -1,0 +1,102 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junil blog</title>
+    <script src="https://kit.fontawesome.com/c3df4d7d1c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/border.css" />
+</head>
+<body>
+    <div id="container">
+        <header id="mainheader">
+            <nav id="navbar">
+                <!-- 로고(로고이미지, 홈페이지 이름) -->
+                <!-- 메뉴(자기소개, 게시글) -->
+                <!-- 링크(로그인, 회원가입) -->
+                <a href="index" id="mainlogo"><i id="logo" class="fab fa-adn"></i> son blog</a>
+                <ul> 
+                    <li><a href="#"><li>블로그소개</li></a>
+                    <li><a href="border"><li>게시글</li></a>
+                </ul>
+                <div>
+                    <span><%=request.getAttribute("name") %></span>
+                    <a href="logout" class="__links">로그아웃</a>
+                </div>
+            </nav>
+        </header>
+
+--------------------------------------------------------------------------------------------------------------------------------
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+#container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: 1200px;
+    height: 100%;
+}
+
+#mainheader {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(26, 26, 26);
+    padding: 0 20px;
+}
+
+#navbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(158, 107, 107);
+}
+nav a {
+    color: rgb(240, 240, 240);
+    font-weight: 500;
+    text-decoration: none;
+}
+nav a:hover {
+    color: deepskyblue;
+}
+nav a #logo {
+    color:deepskyblue;
+}
+
+#mainlogo {
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+nav ul {
+    margin: 5px 0px;
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    justify-content: flex-start;
+    width: 800px;
+}
+
+nav ul li {
+    padding: 10px;
+}
+
+.__links {
+    margin: 0 5px;
+}
