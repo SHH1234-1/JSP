@@ -1,0 +1,79 @@
+package jspEx;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class Border
+ */
+@WebServlet("/jspEx/border")
+public class Border extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+		BorderMgrPool borderMgrPool = new BorderMgrPool();
+		
+		ArrayList<BorderDtlBean> borderDtlList = null;
+		
+		if(request.getAttribute("searchBorderList") == null) { //처음 서블릿을 실행하면 아무것도 검색하지 않은 상태기 때문에 null 
+			borderDtlList = borderMgrPool.getBorderList(); //데이터 베이스에 저장되어있는 게시글을 몽땅 다 가져옴
+		}else {
+			borderDtlList = (ArrayList<BorderDtlBean>)request.getAttribute("searchBorderList"); //검색이 이루어 졌다는 의미이므로 검색으로 걸러진 게시글을 getAttribute하고 Attribute는 오브젝트 클래스이기 때문에 (ArrayList<BorderDtlBean>)다운캐스팅 해줌 
+		}
+		
+		
+		ArrayList<BorderDtlBean> borderList = new ArrayList<BorderDtlBean>();
+		
+		int totalListCount = borderDtlList.size();  //모든 개시글의 개수를 totalListCount
+		
+		int page = 1;
+		if(request.getParameter("page") != null) { //서블릿이 처음실행됐을때 페이지를 클릭하지 않음
+			page = Integer.parseInt(request.getParameter("page")); //String형 page를 int형으로 변환
+		}
+		
+		//List
+		int indexStart = (page-1)*10; //0
+		int indexEnd = page * 10;    //10
+		
+		for(int i = indexStart; i < indexEnd && i < totalListCount; i++) { //게시글을 10개씩 자르거나 게시글이 10개가 안되는 경우 그 게시글 까지 자르기 totalListCount
+			borderList.add(borderDtlList.get(i)); // 페이지 1당 게시글을 10개씩 들고와서 그것을 borderList안에 추가한다
+		}
+		//border.jsp문 설명<span>${page }<
+		//pageNumber
+		int totalPage = (totalListCount%10 == 0 ? totalListCount/10 : totalListCount/10 + 1); //총페이지수는 게시글이 10개씩 저장되므로 10개씩 게시글이 10개가 넘으면 +1을 해줌
+		int pageStart = (page%5 == 0 ? page - 4 : page - (page%5) + 1); //page index를 5개씩 잘라서 보여주기 위해서 시작점
+		int pageEnd = (pageStart + 4 <= totalPage ? pageStart + 4 : totalPage); //끝점지정
+		//jsp에서 쓸 <c:forEach문 을 위해 request.setAttribute
+		request.setAttribute("borderList", borderList);
+		request.setAttribute("page", page);
+		request.setAttribute("totalPage", totalPage);
+		request.setAttribute("pageStart", pageStart);
+		request.setAttribute("pageEnd", pageEnd);
+		
+		
+		HttpSession session = request.getSession();
+		UserBean sessionBean = (UserBean)session.getAttribute("userBean"); //유저정보를 getAttribute해주는  UserBean sessionBean의 sessionBean객체
+		if(sessionBean == null) { //유저정보가 없다면
+			request.getRequestDispatcher("header_login.jsp").include(request, response); //로그인 페이지로 이동
+		}else {
+			request.setAttribute("name", sessionBean.getUser_name()); //sessionBean.getUser_name
+			request.getRequestDispatcher("header_logout.jsp").include(request, response);
+		}
+		request.getRequestDispatcher("border.jsp").include(request, response);
+		request.getRequestDispatcher("footer.jsp").include(request, response);
+		
+	}
+
+}
